@@ -2,6 +2,7 @@
 using JsonWebTokenSecurityAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using JsonWebTokenSecurityAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JsonWebTokenSecurityAPI.Controllers
 {
@@ -29,6 +30,13 @@ namespace JsonWebTokenSecurityAPI.Controllers
                 return BadRequest("Invalid username or password");
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult AuthenticatedOnlyEndpoint()
+        {
+            return Ok("You are authenticated!");
         }
     }
 }
