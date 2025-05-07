@@ -22,7 +22,7 @@ namespace JsonWebTokenSecurityAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<TokenResponseDto>> Login(UserDto request)
         {
             var result = await authService.LoginAsync(request);
 
@@ -44,6 +44,17 @@ namespace JsonWebTokenSecurityAPI.Controllers
         public IActionResult AdminOnlyEndpoint()
         {
             return Ok("You are authenticated and admin!");
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+        {
+            var result = await authService.RefreshTokenAsync(request);
+
+            if (result is null || result.AccessToken is null || result.RefreshToken is null)
+                return Unauthorized("Invalid refresh token");
+
+            return Ok(result);
         }
     }
 }
